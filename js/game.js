@@ -45,14 +45,14 @@ var game = {
 //        me.state.set(me.state.PLAY, new game.PlayScreen());
         me.state.set(me.state.MENU, new game.TitleScreen());
         me.state.set(me.state.PLAY, new game.PlayScreen());
-        //me.state.set(me.state.GAME_OVER, new game.GameOverScreen());
+        me.state.set(me.state.GAME_OVER, new game.GameOverScreen());
 
 
         // add our player entity in the entity pool
         //me.pool.register("mainPlayer", game.PlayerEntity);
 
         me.pool.register("clumsy", game.BirdEntity);
-        me.pool.register("pipe", game.PipeEntity, true);
+        me.pool.register("grumpybird", game.PipeEntity, true);
         //me.pool.register("hit", game.HitEntity, true);
         me.pool.register("ground", game.Ground, true);
 
@@ -62,6 +62,5 @@ var game = {
 
         // Start the game.
         me.state.change(me.state.PLAY);
-        console.log("Me state changed to play");
     }
 };

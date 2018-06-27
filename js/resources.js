@@ -8,4 +8,5 @@ game.resources = [
     {name: "gameoverbg", type:"image", src: "data/img/gameoverbg.png"},
     {name: "hit", type:"image", src: "data/img/hit.png"},
     {name: "getready", type:"image", src: "data/img/getready.png"},
+    {name: "grumpybird", type:"image", src: "data/img/grumpybird.png"},
 ];

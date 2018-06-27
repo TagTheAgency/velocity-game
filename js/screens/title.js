@@ -8,6 +8,7 @@ game.TitleScreen = me.ScreenObject.extend({
     },
 
     onResetEvent: function() {
+        var self = this;
         //me.audio.stop("theme");
         game.data.newHiScore = false;
 
@@ -26,7 +27,10 @@ game.TitleScreen = me.ScreenObject.extend({
         this.logo = new me.Sprite(
             me.game.viewport.width/2,
             me.game.viewport.height/2 - 20,
-            {image: 'logo'}
+            {
+              image: 'player',
+              framewidth: 100
+            }
         );
         me.game.world.addChild(this.logo, 10);
 
@@ -35,9 +39,9 @@ game.TitleScreen = me.ScreenObject.extend({
             .to({y: me.game.viewport.height/2 - 100}, 1000)
             .easing(me.Tween.Easing.Exponential.InOut).start();
 
-        this.ground1 = me.pool.pull("ground", 0, me.video.renderer.getHeight() - 96);
+        this.ground1 = me.pool.pull("ground", 0, me.video.renderer.getHeight() - 82);
         this.ground2 = me.pool.pull("ground", me.video.renderer.getWidth(),
-                                    me.video.renderer.getHeight() - 96);
+                                    me.video.renderer.getHeight() - 82);
         me.game.world.addChild(this.ground1, 11);
         me.game.world.addChild(this.ground2, 11);
 
@@ -67,7 +71,7 @@ game.TitleScreen = me.ScreenObject.extend({
         me.input.unbindPointer(me.input.pointer.LEFT);
         this.ground1 = null;
         this.ground2 = null;
-        me.game.world.removeChild(this.logo);
+        //me.game.world.removeChild(this.logo);
         this.logo = null;
     }
 });

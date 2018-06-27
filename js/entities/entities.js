@@ -92,7 +92,7 @@ game.BirdEntity = me.Entity.extend({
 
     onCollision: function(response) {
         var obj = response.b;
-        if (obj.type === 'pipe' || obj.type === 'ground') {
+        if (obj.type === 'grumpybird' || obj.type === 'ground') {
             me.device.vibrate(500);
             this.collided = true;
         }
@@ -113,7 +113,7 @@ game.BirdEntity = me.Entity.extend({
         this.flyTween.stop();
         this.renderable.currentTransform.identity();
         this.renderable.currentTransform.rotate(Number.prototype.degToRad(90));
-        var finalPos = me.game.viewport.height - this.renderable.width/2 - 96;
+        var finalPos = me.game.viewport.height - this.renderable.width/2 - 82;
         this.endTween
             .to({y: currentPos}, 1000)
             .to({y: finalPos}, 1000)
@@ -129,17 +129,17 @@ game.BirdEntity = me.Entity.extend({
 game.PipeEntity = me.Entity.extend({
     init: function(x, y) {
         var settings = {};
-        settings.image = this.image = me.loader.getImage('pipe');
-        settings.width = 148;
-        settings.height= 1664;
-        settings.framewidth = 148;
-        settings.frameheight = 1664;
+        settings.image = this.image = me.loader.getImage('grumpybird');
+        settings.width = 210;
+        settings.height= 116;
+        settings.framewidth = 210;
+//        settings.frameheight = 1664;
 
         this._super(me.Entity, 'init', [x, y, settings]);
         this.alwaysUpdate = true;
         this.body.gravity = 0;
         this.body.vel.set(-5, 0);
-        this.type = 'pipe';
+        this.type = 'grumpybird';
     },
 
     update: function(dt) {
@@ -182,13 +182,13 @@ game.PipeGenerator = me.Renderable.extend({
 //            hole = Math.min(minHole, hole);
 //            console.log(hole);
             var posY2 = posY - hole;// me.game.viewport.height - this.pipeHoleSize;
-            var pipe1 = new me.pool.pull('pipe', this.posX, posY);
-            var pipe2 = new me.pool.pull('pipe', this.posX, posY2);
+            var obstacle = new me.pool.pull('grumpybird', this.posX, posY);
+            //var pipe2 = new me.pool.pull('pipe', this.posX, posY2);
             //var hitPos = posY - 100;
             //var hit = new me.pool.pull("hit", this.posX, hitPos);
-            pipe1.renderable.currentTransform.scaleY(-1);
-            me.game.world.addChild(pipe1, 10);
-            me.game.world.addChild(pipe2, 10);
+            //pipe1.renderable.currentTransform.scaleY(-1);
+            me.game.world.addChild(obstacle, 10);
+            //me.game.world.addChild(pipe2, 10);
             //me.game.world.addChild(hit, 11);
         }
         this._super(me.Entity, "update", [dt]);
@@ -234,7 +234,7 @@ game.Ground = me.Entity.extend({
         var settings = {};
         settings.image = me.loader.getImage('ground');
         settings.width = 900;
-        settings.height= 96;
+        settings.height= 82;
         this._super(me.Entity, 'init', [x, y, settings]);
         this.alwaysUpdate = true;
         this.body.gravity = 0;

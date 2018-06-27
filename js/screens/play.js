@@ -22,9 +22,9 @@ game.PlayScreen = me.ScreenObject.extend({
 
         me.game.world.addChild(new BackgroundLayer('bg', 1));
 
-        this.ground1 = me.pool.pull('ground', 0, me.game.viewport.height - 96);
+        this.ground1 = me.pool.pull('ground', 0, me.game.viewport.height - 82);
         this.ground2 = me.pool.pull('ground', me.game.viewport.width,
-            me.game.viewport.height - 96);
+            me.game.viewport.height - 82);
         me.game.world.addChild(this.ground1, 11);
         me.game.world.addChild(this.ground2, 11);
 

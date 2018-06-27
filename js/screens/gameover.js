@@ -10,6 +10,7 @@ game.GameOverScreen = me.ScreenObject.extend({
             score: game.data.score,
             steps: game.data.steps
         };
+
         me.save.add(this.savedData);
 
         if (!me.save.topSteps) me.save.add({topSteps: game.data.steps});
@@ -44,21 +45,21 @@ game.GameOverScreen = me.ScreenObject.extend({
         me.game.world.addChild(new BackgroundLayer('bg', 1));
 
         // ground
-        this.ground1 = me.pool.pull('ground', 0, me.game.viewport.height - 96);
+        this.ground1 = me.pool.pull('ground', 0, me.game.viewport.height - 82);
         this.ground2 = me.pool.pull('ground', me.game.viewport.width,
-            me.video.renderer.getHeight() - 96);
+            me.video.renderer.getHeight() - 82);
         me.game.world.addChild(this.ground1, 11);
         me.game.world.addChild(this.ground2, 11);
 
-        // add the dialog witht he game information
-        if (game.data.newHiScore) {
+        // add the dialog with the game information
+/*        if (game.data.newHiScore) {
             var newRect = new me.Sprite(
                 gameOverBG.width/2,
                 gameOverBG.height/2,
                 {image: 'new'}
             );
             me.game.world.addChild(newRect, 12);
-        }
+        }*/
 
         this.dialog = new (me.Renderable.extend({
             // constructor
@@ -67,9 +68,9 @@ game.GameOverScreen = me.ScreenObject.extend({
                     [0, 0, me.game.viewport.width/2, me.game.viewport.height/2]
                 );
                 this.font = new me.Font('gamefont', 40, 'black', 'left');
-                this.steps = 'Steps: ' + game.data.steps.toString();
-                this.topSteps= 'Higher Step: ' + me.save.topSteps.toString();
+                this.steps = 'Score: ' + game.data.steps.toFixed(2);
             },
+
 
             draw: function (renderer) {
                 var stepsText = this.font.measureText(renderer, this.steps);
@@ -80,20 +81,22 @@ game.GameOverScreen = me.ScreenObject.extend({
                 this.font.draw(
                     renderer,
                     this.steps,
-                    me.game.viewport.width/2 - stepsText.width/2 - 60,
-                    me.game.viewport.height/2
+                    me.game.viewport.width/2 + stepsText.width/2,
+                    me.game.viewport.height/2 + 150
                 );
 
                 //top score
-                this.font.draw(
+/*                this.font.draw(
                     renderer,
                     this.topSteps,
                     me.game.viewport.width/2 - stepsText.width/2 - 60,
                     me.game.viewport.height/2 + 50
-                );
+                );*/
             }
         }));
         me.game.world.addChild(this.dialog, 12);
+
+
     },
 
     onDestroyEvent: function() {
