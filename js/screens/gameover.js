@@ -18,9 +18,9 @@ game.GameOverScreen = me.ScreenObject.extend({
             me.save.topSteps = game.data.steps;
             game.data.newHiScore = true;
         }
-        me.input.bindKey(me.input.KEY.ENTER, "enter", true);
-        me.input.bindKey(me.input.KEY.SPACE, "enter", false)
-        me.input.bindPointer(me.input.pointer.LEFT, me.input.KEY.ENTER);
+        //me.input.bindKey(me.input.KEY.ENTER, "enter", true);
+        //me.input.bindKey(me.input.KEY.SPACE, "enter", false)
+        //me.input.bindPointer(me.input.pointer.LEFT, me.input.KEY.ENTER);
 
         this.handler = me.event.subscribe(me.event.KEYDOWN,
             function (action, keyCode, edge) {
@@ -96,7 +96,9 @@ game.GameOverScreen = me.ScreenObject.extend({
         }));
         me.game.world.addChild(this.dialog, 12);
 
-        me.game.world.addChild(new game.TextInput(300,300,'text',200), 12);
+        me.game.world.addChild(new game.TextInput(350,350,'text',200, "Name"), 12);
+        me.game.world.addChild(new game.TextInput(350,390,'text',200, "Phone"), 12);
+        me.game.world.addChild(new game.TextInput(350,430,'text',200, "Email"), 12);
 
 
     },

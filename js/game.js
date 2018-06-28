@@ -57,7 +57,7 @@ var game = {
         me.pool.register("ground", game.Ground, true);
 
         me.input.bindKey(me.input.KEY.SPACE, "fly", true);
-        me.input.bindKey(me.input.KEY.M, "mute", true);
+        //me.input.bindKey(me.input.KEY.M, "mute", true);
         me.input.bindPointer(me.input.KEY.SPACE);
 
         // Start the game.

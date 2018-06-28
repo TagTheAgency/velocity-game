@@ -208,8 +208,8 @@ game.PipeGenerator = me.Renderable.extend({
 });
 
 game.TextInput = me.Renderable.extend({
-    init : function (x, y, type, length) {
-        this.$input = $('<input type="' + type + '" required>').css({
+    init : function (x, y, type, length, placeholder) {
+        this.$input = $('<input type="' + type + '" required placeholder="' + placeholder + '">').css({
             "left" : x,
             "top" : y
         });
