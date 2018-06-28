@@ -15,7 +15,11 @@ game.BirdEntity = me.Entity.extend({
         this.renderable.setCurrentAnimation("flying");
         //this.renderable.anchorPoint = new me.Vector2d(0.1, 0.5);
         this.body.removeShapeAt(0);
-        this.body.addShape(new me.Ellipse(5, 5, 71, 51));
+        //this.body.addShape(new me.Ellipse(5, 5, 71, 51));
+
+        //extend a vector!
+        this.body.addShape(new me.Polygon(0,0,[new me.Vector2d(-50,25),new me.Vector2d(-50,-25),new me.Vector2d(50,0)]));
+
 
         // a tween object for the flying physic effect
         this.flyTween = new me.Tween(this.pos);
@@ -96,12 +100,6 @@ game.BirdEntity = me.Entity.extend({
             me.device.vibrate(500);
             this.collided = true;
         }
-        // remove the hit box
-        if (obj.type === 'hit') {
-            me.game.world.removeChildNow(obj);
-            //game.data.steps++;
-            //me.audio.play('hit');
-        }
     },
 
     endAnimation: function() {
@@ -130,15 +128,27 @@ game.PipeEntity = me.Entity.extend({
     init: function(x, y) {
         var settings = {};
         settings.image = this.image = me.loader.getImage('grumpybird');
-        settings.width = 210;
-        settings.height= 116;
-        settings.framewidth = 210;
+        settings.width = 175;
+        settings.height= 110;
+        settings.framewidth = 175;
 //        settings.frameheight = 1664;
 
         this._super(me.Entity, 'init', [x, y, settings]);
         this.alwaysUpdate = true;
         this.body.gravity = 0;
-        this.body.vel.set(-5, 0);
+
+        var minVel = -5;
+        var maxVel = -15;
+
+        var actualVel = game.data.steps / -10;
+        console.log("Actual velocity", actualVel);
+        actualVel += minVel;
+        console.log("Actual velocity", actualVel);
+
+        this.body.removeShapeAt(0);
+        this.body.addShape(new me.Ellipse(0, 0, 110, 60));
+
+        this.body.vel.set(actualVel, 0);
         this.type = 'grumpybird';
     },
 
@@ -170,15 +180,16 @@ game.PipeGenerator = me.Renderable.extend({
 
     update: function(dt) {
         if (this.generate++ % this.pipeFrequency == 0) {
-            var posY = Number.prototype.random(
-                    me.video.renderer.getHeight() - 100,
-                    200
-            );
+            var posY = Number.prototype.random(0, 400);
+//                    me.video.renderer.getHeight() - 100,
+//                    800
+//            );
+            console.log(posY);
             var minHole = -100;
             var hole = (me.game.viewport.height + this.pipeHoleSize) - (game.data.steps*10 || 0);
-            console.log(game.data.steps || 0);
-            console.log("original :", posY, me.game.viewport.height, this.pipeHoleSize, posY - me.game.viewport.height - this.pipeHoleSize);
-            console.log("Calculat :", posY, hole, posY - hole);
+//            console.log(game.data.steps || 0);
+//            console.log("original :", posY, me.game.viewport.height, this.pipeHoleSize, posY - me.game.viewport.height - this.pipeHoleSize);
+//            console.log("Calculat :", posY, hole, posY - hole);
 //            hole = Math.min(minHole, hole);
 //            console.log(hole);
             var posY2 = posY - hole;// me.game.viewport.height - this.pipeHoleSize;
@@ -194,6 +205,32 @@ game.PipeGenerator = me.Renderable.extend({
         this._super(me.Entity, "update", [dt]);
     },
 
+});
+
+game.TextInput = me.Renderable.extend({
+    init : function (x, y, type, length) {
+        this.$input = $('<input type="' + type + '" required>').css({
+            "left" : x,
+            "top" : y
+        });
+
+        switch (type) {
+        case "text":
+            this.$input
+                .attr("maxlength", length)
+                .attr("pattern", "[a-zA-Z0-9_\-]+");
+            break;
+        case "number":
+            this.$input.attr("max", length);
+            break;
+        }
+
+        $(me.video.getWrapper()).append(this.$input);
+    },
+
+    destroy : function () {
+        this.$input.remove();
+    }
 });
 /*
 game.HitEntity = me.Entity.extend({

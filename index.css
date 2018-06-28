@@ -31,4 +31,17 @@ body {
     image-rendering: optimize-contrast;
     image-rendering: pixelated;
     -ms-interpolation-mode: nearest-neighbor;
+    width: 900px;
+    height: 600px;
+
+}
+#screen {
+    position: relative;
+    width: 900px;
+    margin: auto;
+}
+
+#screen input {
+    position: absolute;
+    z-index: 2;
 }

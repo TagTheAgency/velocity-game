@@ -96,6 +96,8 @@ game.GameOverScreen = me.ScreenObject.extend({
         }));
         me.game.world.addChild(this.dialog, 12);
 
+        me.game.world.addChild(new game.TextInput(300,300,'text',200), 12);
+
 
     },
 
