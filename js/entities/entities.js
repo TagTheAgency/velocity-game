@@ -96,7 +96,7 @@ game.BirdEntity = me.Entity.extend({
 
     onCollision: function(response) {
         var obj = response.b;
-        if (obj.type === 'grumpybird' || obj.type === 'ground') {
+        if (obj.type === 'cabinet' || obj.type === 'light' || obj.type === 'ground') {
             me.device.vibrate(500);
             this.collided = true;
         }
@@ -127,11 +127,11 @@ game.BirdEntity = me.Entity.extend({
 game.PipeEntity = me.Entity.extend({
     init: function(x, y) {
         var settings = {};
-        settings.image = this.image = me.loader.getImage('grumpybird');
+        settings.image = this.image = me.loader.getImage('cabinet');
         settings.width = 175;
-        settings.height= 110;
+        settings.height= 1664;
         settings.framewidth = 175;
-//        settings.frameheight = 1664;
+        settings.frameheight = 1664;
 
         this._super(me.Entity, 'init', [x, y, settings]);
         this.alwaysUpdate = true;
@@ -145,11 +145,55 @@ game.PipeEntity = me.Entity.extend({
         actualVel += minVel;
         console.log("Actual velocity", actualVel);
 
-        this.body.removeShapeAt(0);
-        this.body.addShape(new me.Ellipse(0, 0, 110, 60));
+        //this.body.removeShapeAt(0);
+        //this.body.addShape(new me.Ellipse(0, 0, 110, 60));
 
         this.body.vel.set(actualVel, 0);
-        this.type = 'grumpybird';
+        this.type = 'cabinet';
+    },
+
+    update: function(dt) {
+        // mechanics
+        if (!game.data.start) {
+            return this._super(me.Entity, 'update', [dt]);
+        }
+        this.pos.add(this.body.vel);
+        if (this.pos.x < -this.image.width) {
+            me.game.world.removeChild(this);
+        }
+        me.Rect.prototype.updateBounds.apply(this);
+        this._super(me.Entity, 'update', [dt]);
+        return true;
+    },
+
+});
+
+game.LightEntity = me.Entity.extend({
+    init: function(x, y) {
+        var settings = {};
+        settings.image = this.image = me.loader.getImage('light');
+        settings.width = 175;
+        settings.height= 800;
+        settings.framewidth = 175;
+        settings.frameheight = 800;
+
+        this._super(me.Entity, 'init', [x, y, settings]);
+        this.alwaysUpdate = true;
+        this.body.gravity = 0;
+
+        var minVel = -5;
+        var maxVel = -15;
+
+        var actualVel = game.data.steps / -10;
+        console.log("Actual velocity", actualVel);
+        actualVel += minVel;
+        console.log("Actual velocity", actualVel);
+
+        //this.body.removeShapeAt(0);
+        //this.body.addShape(new me.Ellipse(0, 0, 110, 60));
+
+        this.body.vel.set(actualVel, 0);
+        this.type = 'cabinet';
     },
 
     update: function(dt) {
@@ -180,7 +224,7 @@ game.PipeGenerator = me.Renderable.extend({
 
     update: function(dt) {
         if (this.generate++ % this.pipeFrequency == 0) {
-            var posY = Number.prototype.random(0, 400);
+            var posY = Number.prototype.random(200, 400);
 //                    me.video.renderer.getHeight() - 100,
 //                    800
 //            );
@@ -193,12 +237,15 @@ game.PipeGenerator = me.Renderable.extend({
 //            hole = Math.min(minHole, hole);
 //            console.log(hole);
             var posY2 = posY - hole;// me.game.viewport.height - this.pipeHoleSize;
-            var obstacle = new me.pool.pull('grumpybird', this.posX, posY);
+            var obstacle = new me.pool.pull('cabinet', this.posX, posY);
+
+            var obstacle2 = new me.pool.pull('light', this.posX, posY-1000);
             //var pipe2 = new me.pool.pull('pipe', this.posX, posY2);
             //var hitPos = posY - 100;
             //var hit = new me.pool.pull("hit", this.posX, hitPos);
             //pipe1.renderable.currentTransform.scaleY(-1);
             me.game.world.addChild(obstacle, 10);
+            me.game.world.addChild(obstacle2, 11);
             //me.game.world.addChild(pipe2, 10);
             //me.game.world.addChild(hit, 11);
         }

@@ -1,5 +1,5 @@
 game.resources = [
-    {name: "bg", type:"image", src: "data/img/bg.png"},
+    {name: "bg", type:"image", src: "data/img/office_bg.png"},
     {name: "player", type: "image", src: "data/img/plane.png" },
     {name: "clumsy", type:"image", src: "data/img/plane.png"},
     {name: "pipe", type:"image", src: "data/img/pipe.png"},
@@ -9,4 +9,6 @@ game.resources = [
     {name: "hit", type:"image", src: "data/img/hit.png"},
     {name: "getready", type:"image", src: "data/img/getready.png"},
     {name: "grumpybird", type:"image", src: "data/img/grumpybird.png"},
+    {name: "light", type:"image", src: "data/img/office_assets_light.png"},
+    {name: "cabinet", type:"image", src: "data/img/office_assets_kiwi_cabinet.png"}
 ];

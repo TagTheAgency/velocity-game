@@ -52,7 +52,8 @@ var game = {
         //me.pool.register("mainPlayer", game.PlayerEntity);
 
         me.pool.register("clumsy", game.BirdEntity);
-        me.pool.register("grumpybird", game.PipeEntity, true);
+        me.pool.register("cabinet", game.PipeEntity, true);
+        me.pool.register("light", game.LightEntity, true);
         //me.pool.register("hit", game.HitEntity, true);
         me.pool.register("ground", game.Ground, true);
 
