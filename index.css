@@ -39,6 +39,8 @@ body {
     position: relative;
     width: 900px;
     margin: auto;
+    max-width: 100%;
+
 }
 
 #screen input {

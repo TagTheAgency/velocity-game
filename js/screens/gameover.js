@@ -18,9 +18,9 @@ game.GameOverScreen = me.ScreenObject.extend({
             me.save.topSteps = game.data.steps;
             game.data.newHiScore = true;
         }
-        //me.input.bindKey(me.input.KEY.ENTER, "enter", true);
-        //me.input.bindKey(me.input.KEY.SPACE, "enter", false)
-        //me.input.bindPointer(me.input.pointer.LEFT, me.input.KEY.ENTER);
+        me.input.bindKey(me.input.KEY.ENTER, "enter", true);
+        me.input.bindKey(me.input.KEY.SPACE, "enter", false)
+        me.input.bindPointer(me.input.pointer.LEFT, me.input.KEY.ENTER);
 
         this.handler = me.event.subscribe(me.event.KEYDOWN,
             function (action, keyCode, edge) {
@@ -29,11 +29,11 @@ game.GameOverScreen = me.ScreenObject.extend({
                 }
             });
 
-        me.game.world.addChild(new me.Sprite(
+/*        me.game.world.addChild(new me.Sprite(
             me.game.viewport.width/2,
             me.game.viewport.height/2 - 100,
             {image: 'gameover'}
-        ), 12);
+        ), 12);*/
 
         var gameOverBG = new me.Sprite(
             me.game.viewport.width/2,
@@ -67,22 +67,29 @@ game.GameOverScreen = me.ScreenObject.extend({
                 this._super(me.Renderable, 'init',
                     [0, 0, me.game.viewport.width/2, me.game.viewport.height/2]
                 );
-                this.font = new me.Font('gamefont', 40, 'black', 'left');
-                this.steps = 'Score: ' + game.data.steps.toFixed(2);
+                this.yourScoreFont = new me.Font('gamefont', 20, 'white', 'center');
+                this.scoreFont = new me.Font('gamefont', 40, 'white', 'center');
+                this.yourScore = 'Y O U R  S C O R E';
             },
 
 
             draw: function (renderer) {
-                var stepsText = this.font.measureText(renderer, this.steps);
-                var topStepsText = this.font.measureText(renderer, this.topSteps);
-                var scoreText = this.font.measureText(renderer, this.score);
+                var stepsText = this.scoreFont.measureText(renderer, game.data.steps.toFixed(2));
+                //var topStepsText = this.font.measureText(renderer, this.topSteps);
+                var yourScoreText = this.yourScoreFont.measureText(renderer, this.yourScore);
 
                 //steps
-                this.font.draw(
+                this.yourScoreFont.draw(
                     renderer,
-                    this.steps,
+                    this.yourScore,
+                    me.game.viewport.width/2 + yourScoreText.width/2,
+                    me.game.viewport.height/2
+                );
+                this.scoreFont.draw(
+                    renderer,
+                    game.data.steps.toFixed(2),
                     me.game.viewport.width/2 + stepsText.width/2,
-                    me.game.viewport.height/2 + 150
+                    me.game.viewport.height/2 + 50
                 );
 
                 //top score
@@ -96,9 +103,9 @@ game.GameOverScreen = me.ScreenObject.extend({
         }));
         me.game.world.addChild(this.dialog, 12);
 
-        me.game.world.addChild(new game.TextInput(350,350,'text',200, "Name"), 12);
-        me.game.world.addChild(new game.TextInput(350,390,'text',200, "Phone"), 12);
-        me.game.world.addChild(new game.TextInput(350,430,'text',200, "Email"), 12);
+        //me.game.world.addChild(new game.TextInput(350,350,'text',200, "Name"), 12);
+        //me.game.world.addChild(new game.TextInput(350,390,'text',200, "Phone"), 12);
+        //me.game.world.addChild(new game.TextInput(350,430,'text',200, "Email"), 12);
 
 
     },

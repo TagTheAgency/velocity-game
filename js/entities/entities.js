@@ -128,10 +128,10 @@ game.PipeEntity = me.Entity.extend({
     init: function(x, y) {
         var settings = {};
         settings.image = this.image = me.loader.getImage('cabinet');
-        settings.width = 175;
-        settings.height= 1664;
-        settings.framewidth = 175;
-        settings.frameheight = 1664;
+        settings.width = 172;
+        settings.height= 453;
+        settings.framewidth = 172;
+        settings.frameheight = 453;
 
         this._super(me.Entity, 'init', [x, y, settings]);
         this.alwaysUpdate = true;
@@ -145,8 +145,8 @@ game.PipeEntity = me.Entity.extend({
         actualVel += minVel;
         console.log("Actual velocity", actualVel);
 
-        //this.body.removeShapeAt(0);
-        //this.body.addShape(new me.Ellipse(0, 0, 110, 60));
+        this.body.removeShapeAt(0);
+        this.body.addShapesFromJSON(me.loader.getJSON("shapesdef"), "office_assets_kiwi_cabinet");
 
         this.body.vel.set(actualVel, 0);
         this.type = 'cabinet';
@@ -190,7 +190,7 @@ game.LightEntity = me.Entity.extend({
         console.log("Actual velocity", actualVel);
 
         //this.body.removeShapeAt(0);
-        //this.body.addShape(new me.Ellipse(0, 0, 110, 60));
+        //this.body.addShape(new me.Ellipse(0, 0, 110, 800));
 
         this.body.vel.set(actualVel, 0);
         this.type = 'cabinet';
@@ -231,6 +231,16 @@ game.PipeGenerator = me.Renderable.extend({
             console.log(posY);
             var minHole = -100;
             var hole = (me.game.viewport.height + this.pipeHoleSize) - (game.data.steps*10 || 0);
+
+            var startHole = posY - 1000;
+            var minHole = posY - 900;
+
+            var hole = startHole + (game.data.steps*10 || 0);
+            console.log("Minhole",minHole, "getting smaller hole", hole);
+            var hole = Math.min(minHole, hole);
+            console.log(hole);
+
+
 //            console.log(game.data.steps || 0);
 //            console.log("original :", posY, me.game.viewport.height, this.pipeHoleSize, posY - me.game.viewport.height - this.pipeHoleSize);
 //            console.log("Calculat :", posY, hole, posY - hole);
@@ -238,8 +248,8 @@ game.PipeGenerator = me.Renderable.extend({
 //            console.log(hole);
             var posY2 = posY - hole;// me.game.viewport.height - this.pipeHoleSize;
             var obstacle = new me.pool.pull('cabinet', this.posX, posY);
-
-            var obstacle2 = new me.pool.pull('light', this.posX, posY-1000);
+            console.log(hole);
+            var obstacle2 = new me.pool.pull('light', this.posX, hole);
             //var pipe2 = new me.pool.pull('pipe', this.posX, posY2);
             //var hitPos = posY - 100;
             //var hit = new me.pool.pull("hit", this.posX, hitPos);
