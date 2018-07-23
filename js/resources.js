@@ -11,5 +11,6 @@ game.resources = [
     {name: "grumpybird", type:"image", src: "data/img/grumpybird.png"},
     {name: "light", type:"image", src: "data/img/office_assets_light.png"},
     {name: "cabinet", type:"image", src: "data/img/office_assets_kiwi_cabinet.png"},
+    {name: "try_again", type: "image", src: "data/img/try_again_button.png"},
     {name: "shapesdef", type:"json", src: "data/json/kiwi_trace.json"}
 ];

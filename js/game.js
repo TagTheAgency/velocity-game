@@ -56,6 +56,7 @@ var game = {
         me.pool.register("light", game.LightEntity, true);
         //me.pool.register("hit", game.HitEntity, true);
         me.pool.register("ground", game.Ground, true);
+        me.pool.register("restart_button", game.RestartButton, true);
 
         me.input.bindKey(me.input.KEY.SPACE, "fly", true);
         //me.input.bindKey(me.input.KEY.M, "mute", true);

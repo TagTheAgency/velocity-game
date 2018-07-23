@@ -172,10 +172,10 @@ game.LightEntity = me.Entity.extend({
     init: function(x, y) {
         var settings = {};
         settings.image = this.image = me.loader.getImage('light');
-        settings.width = 175;
-        settings.height= 800;
-        settings.framewidth = 175;
-        settings.frameheight = 800;
+        settings.width = 140;
+        settings.height= 804;
+        settings.framewidth = 140;
+        settings.frameheight = 804;
 
         this._super(me.Entity, 'init', [x, y, settings]);
         this.alwaysUpdate = true;
@@ -345,5 +345,30 @@ game.Ground = me.Entity.extend({
         me.Rect.prototype.updateBounds.apply(this);
         return this._super(me.Entity, 'update', [dt]);
     },
+
+});
+
+game.RestartButton = me.GUI_Object.extend({
+  init: function(x, y) {
+    var settings = {};
+    settings.image = "try_again";
+    settings.spritewidth = 62;
+    settings.spriteheight = 84;
+    this._super(me.GUI_Object, "init", [x, y, settings]);
+  },
+
+  onClick: function(event) {
+    console.log("Tweetybird restrt");
+    me.state.change(me.state.MENU);
+    return false;
+  },
+
+  onOver: function(event) {
+    console.log("over", event);
+  },
+
+  onOut: function(event) {
+    console.log("out", event);
+  }
 
 });
