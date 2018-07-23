@@ -95,12 +95,12 @@ game.GameOverScreen = me.ScreenObject.extend({
         }));
         me.game.world.addChild(this.dialog, 12);
 
-        var Tweet = me.GUI_Object.extend({
+        var EnterComp = me.GUI_Object.extend({
           init: function(x, y) {
             var settings = {};
-            settings.image = "player";
-            settings.spritewidth = 152;
-            settings.spriteheight = 75;
+            settings.image = "enter_comp_button";
+            settings.spritewidth = 212;
+            settings.spriteheight = 34;
             this._super(me.GUI_Object, "init", [x, y, settings]);
           },
 
@@ -112,17 +112,10 @@ game.GameOverScreen = me.ScreenObject.extend({
             return false;
           },
 
-          onOver: function(event) {
-            console.log("over", event);
-          },
-
-          onOut: function(event) {
-            console.log("out", event);
-          }
 
         });
 
-        this.tweet = new Tweet(200, 100);
+        this.tweet = new EnterComp(620, 400);
         me.game.world.addChild(this.tweet, 14);
 
 
