@@ -354,6 +354,7 @@ game.RestartButton = me.GUI_Object.extend({
     settings.image = "try_again";
     settings.spritewidth = 62;
     settings.spriteheight = 84;
+    this.floating = true;
     this._super(me.GUI_Object, "init", [x, y, settings]);
   },
 

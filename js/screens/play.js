@@ -20,7 +20,8 @@ game.PlayScreen = me.ScreenObject.extend({
         game.data.start = false;
         game.data.newHiscore = false;
 
-        me.game.world.addChild(new BackgroundLayer('bg', 1));
+        this.bg = new BackgroundLayer('bg', 1);
+        me.game.world.addChild(this.bg);
 
         this.ground1 = me.pool.pull('ground', 0, me.game.viewport.height - 82);
         this.ground2 = me.pool.pull('ground', me.game.viewport.width,
@@ -57,10 +58,15 @@ game.PlayScreen = me.ScreenObject.extend({
     onDestroyEvent: function() {
         //me.audio.stopTrack('theme');
         // free the stored instance
+
+        me.game.world.removeChild(this.HUD);
+        me.game.world.removeChild(this.bird);
+        me.game.world.removeChild(this.bg);
         this.HUD = null;
         this.bird = null;
         this.ground1 = null;
         this.ground2 = null;
+        this.bg = null;
         me.input.unbindKey(me.input.KEY.SPACE);
         me.input.unbindPointer(me.input.pointer.LEFT);
     }

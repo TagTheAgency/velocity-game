@@ -142,6 +142,10 @@ game.GameOverScreen = me.ScreenObject.extend({
         this.ground1 = null;
         this.ground2 = null;
         this.font = null;
+        this.tweet = null;
+        this.restart = null;
+        this.gameOverBG = null;
+
         //me.audio.stop("theme");
     }
 });

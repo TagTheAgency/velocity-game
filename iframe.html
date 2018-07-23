@@ -1,0 +1,11 @@
+<html>
+<body>
+  <iframe width="900px" height="600px" src="index.html"/>
+  <script>
+
+  var realWindow = window.parent || window;
+  realWindow.addEventListener(    "keydown", key.downHandler.bind(key), false  );
+  realWindow.addEventListener(    "keyup", key.upHandler.bind(key), false  );
+  </script>
+</body>
+</html>
