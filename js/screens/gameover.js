@@ -18,16 +18,16 @@ game.GameOverScreen = me.ScreenObject.extend({
             me.save.topSteps = game.data.steps;
             game.data.newHiScore = true;
         }
-        me.input.bindKey(me.input.KEY.ENTER, "enter", true);
-        //me.input.bindKey(me.input.KEY.SPACE, "enter", false)
-        me.input.bindPointer(me.input.pointer.LEFT, me.input.KEY.ENTER);
+        //me.input.bindKey(me.input.KEY.ENTER, "enter", true);
+        me.input.bindKey(me.input.KEY.SPACE, "enter", false)
+        //me.input.bindPointer(me.input.pointer.LEFT, me.input.KEY.ENTER);
 
-        //this.handler = me.event.subscribe(me.event.KEYDOWN,
-        //    function (action, keyCode, edge) {
-        //        if (action === "enter") {
-        //            me.state.change(me.state.MENU);
-        //        }
-        //    });
+        this.handler = me.event.subscribe(me.event.KEYDOWN,
+            function (action, keyCode, edge) {
+                if (action === "enter") {
+                    me.state.change(me.state.MENU);
+                }
+            });
 
 /*        me.game.world.addChild(new me.Sprite(
             me.game.viewport.width/2,
@@ -112,6 +112,14 @@ game.GameOverScreen = me.ScreenObject.extend({
             return false;
           },
 
+          onOver: function(event) {
+            document.body.style.cursor = 'pointer';
+          },
+
+          onOut: function(event) {
+            document.body.style.cursor = 'auto';
+          }
+
 
         });
 
@@ -128,9 +136,9 @@ game.GameOverScreen = me.ScreenObject.extend({
 
     onDestroyEvent: function() {
         // unregister the event
-        //me.event.unsubscribe(this.handler);
+        me.event.unsubscribe(this.handler);
         //me.input.unbindKey(me.input.KEY.ENTER);
-        //me.input.unbindKey(me.input.KEY.SPACE);
+        me.input.unbindKey(me.input.KEY.SPACE);
         //me.input.unbindPointer(me.input.pointer.LEFT);
         this.ground1 = null;
         this.ground2 = null;

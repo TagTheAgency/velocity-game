@@ -68,6 +68,8 @@ game.BirdEntity = me.Entity.extend({
             if (this.currentAngle <= this.maxAngleRotation) {
                 this.renderable.currentTransform.identity();
                 this.currentAngle = this.maxAngleRotation;
+            } else {
+              this.body.getShape(0).rotate( - Number.prototype.degToRad(10));
             }
 
         } else {
@@ -77,9 +79,12 @@ game.BirdEntity = me.Entity.extend({
             if (this.currentAngle >= this.maxAngleRotationDown) {
                 this.renderable.currentTransform.identity();
                 this.currentAngle = this.maxAngleRotationDown;
+            } else {
+              this.body.getShape(0).rotate(Number.prototype.degToRad(0.5));
             }
         }
         this.renderable.currentTransform.rotate(this.currentAngle);
+
         me.Rect.prototype.updateBounds.apply(this);
 
         var hitSky = -80; // bird height + 20px
@@ -96,7 +101,7 @@ game.BirdEntity = me.Entity.extend({
 
     onCollision: function(response) {
         var obj = response.b;
-        if (obj.type === 'cabinet' || obj.type === 'light' || obj.type === 'ground') {
+        if (obj.type === 'cabinet' || obj.type === 'desk' || obj.type === 'light' || obj.type === 'ground') {
             me.device.vibrate(500);
             this.collided = true;
         }
@@ -123,8 +128,68 @@ game.BirdEntity = me.Entity.extend({
 
 });
 
+game.DeskEntity = me.Entity.extend({
+    init: function(x, y) {
+        var settings = {};
+        var small = true;
+        if (Math.random() > 0.5) {
+          small = false;
+          settings.image = this.image = me.loader.getImage('desk_lrg');
+          settings.width = 375;
+          settings.height= 400;
+          settings.framewidth = 375;
+          settings.frameheight = 400;
+          x = x - 80;
+        } else {
+          settings.image = this.image = me.loader.getImage('desk_sml');
+          settings.width = 222;
+          settings.height= 354;
+          settings.framewidth = 222;
+          settings.frameheight = 354;
+          x = x - 20;
+        }
 
-game.PipeEntity = me.Entity.extend({
+        this._super(me.Entity, 'init', [x, y, settings]);
+        this.alwaysUpdate = true;
+        this.body.gravity = 0;
+
+        this.body.removeShapeAt(0);
+        if (small) {
+          this.body.addShapesFromJSON(me.loader.getJSON("shapesdef"), "desk-sml");
+        } else {
+          this.body.addShapesFromJSON(me.loader.getJSON("shapesdef"), "desk-lrg");
+        }
+
+        var minVel = -5;
+        var maxVel = -15;
+
+        var actualVel = game.data.steps / -10;
+        actualVel += minVel;
+
+        //this.body.removeShapeAt(0);
+        //this.body.addShapesFromJSON(me.loader.getJSON("shapesdef"), "office_assets_kiwi_cabinet");
+
+        this.body.vel.set(actualVel, 0);
+        this.type = 'desk';
+    },
+
+    update: function(dt) {
+        // mechanics
+        if (!game.data.start) {
+            return this._super(me.Entity, 'update', [dt]);
+        }
+        this.pos.add(this.body.vel);
+        if (this.pos.x < -this.image.width) {
+            me.game.world.removeChild(this);
+        }
+        me.Rect.prototype.updateBounds.apply(this);
+        this._super(me.Entity, 'update', [dt]);
+        return true;
+    },
+
+});
+
+game.CabinetEntity = me.Entity.extend({
     init: function(x, y) {
         var settings = {};
         settings.image = this.image = me.loader.getImage('cabinet');
@@ -141,9 +206,7 @@ game.PipeEntity = me.Entity.extend({
         var maxVel = -15;
 
         var actualVel = game.data.steps / -10;
-        console.log("Actual velocity", actualVel);
         actualVel += minVel;
-        console.log("Actual velocity", actualVel);
 
         this.body.removeShapeAt(0);
         this.body.addShapesFromJSON(me.loader.getJSON("shapesdef"), "office_assets_kiwi_cabinet");
@@ -185,12 +248,7 @@ game.LightEntity = me.Entity.extend({
         var maxVel = -15;
 
         var actualVel = game.data.steps / -10;
-        console.log("Actual velocity", actualVel);
         actualVel += minVel;
-        console.log("Actual velocity", actualVel);
-
-        //this.body.removeShapeAt(0);
-        //this.body.addShape(new me.Ellipse(0, 0, 110, 800));
 
         this.body.vel.set(actualVel, 0);
         this.type = 'cabinet';
@@ -228,36 +286,32 @@ game.PipeGenerator = me.Renderable.extend({
 //                    me.video.renderer.getHeight() - 100,
 //                    800
 //            );
-            console.log(posY);
             var minHole = -100;
             var hole = (me.game.viewport.height + this.pipeHoleSize) - (game.data.steps*10 || 0);
 
             var startHole = posY - 1000;
-            var minHole = posY - 900;
+            var minHole = posY - 875;
 
-            var hole = startHole + (game.data.steps*10 || 0);
-            console.log("Minhole",minHole, "getting smaller hole", hole);
-            var hole = Math.min(minHole, hole);
-            console.log(hole);
+            var hole = startHole + (game.data.steps*6 || 0);
 
+            hole = Math.min(minHole, hole);
 
-//            console.log(game.data.steps || 0);
-//            console.log("original :", posY, me.game.viewport.height, this.pipeHoleSize, posY - me.game.viewport.height - this.pipeHoleSize);
-//            console.log("Calculat :", posY, hole, posY - hole);
-//            hole = Math.min(minHole, hole);
-//            console.log(hole);
             var posY2 = posY - hole;// me.game.viewport.height - this.pipeHoleSize;
-            var obstacle = new me.pool.pull('cabinet', this.posX, posY);
-            console.log(hole);
+
+            var rand = Math.random();
+
+            if (rand > 0.8) {
+              var obstacle = new me.pool.pull('cabinet', this.posX, posY);
+            } else {
+              var obstacle = new me.pool.pull('desk', this.posX, posY);
+            }
+
             var obstacle2 = new me.pool.pull('light', this.posX, hole);
-            //var pipe2 = new me.pool.pull('pipe', this.posX, posY2);
-            //var hitPos = posY - 100;
-            //var hit = new me.pool.pull("hit", this.posX, hitPos);
-            //pipe1.renderable.currentTransform.scaleY(-1);
+
             me.game.world.addChild(obstacle, 10);
             me.game.world.addChild(obstacle2, 11);
-            //me.game.world.addChild(pipe2, 10);
-            //me.game.world.addChild(hit, 11);
+
+
         }
         this._super(me.Entity, "update", [dt]);
     },
@@ -365,11 +419,11 @@ game.RestartButton = me.GUI_Object.extend({
   },
 
   onOver: function(event) {
-    console.log("over", event);
+    document.body.style.cursor = 'pointer';
   },
 
   onOut: function(event) {
-    console.log("out", event);
+    document.body.style.cursor = 'auto';
   }
 
 });
