@@ -1,4 +1,5 @@
 game.Player = me.Sprite.extend({
+/*
   init : function () {
       console.log("Player init");
       var image = me.loader.getImage("player");
@@ -12,8 +13,8 @@ game.Player = me.Sprite.extend({
       this.velx = 450;
       this.maxX = me.game.viewport.width - this.width;
   },
-
-  update : function (time) {
+*/
+/*  update : function (time) {
     this._super(me.Sprite, "update", [time]);
     if (me.input.isKeyPressed("left")) {
         this.pos.x -= this.velx * time / 1000;
@@ -26,5 +27,5 @@ game.Player = me.Sprite.extend({
     this.pos.x = this.pos.x.clamp(0, this.maxX);
 
     return true;
-  }
+  }*/
 });

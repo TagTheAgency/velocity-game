@@ -14,8 +14,10 @@ game.GameOverScreen = me.ScreenObject.extend({
         me.save.add(this.savedData);
 
         if (!me.save.topSteps) me.save.add({topSteps: game.data.steps});
+        if (!me.save.topPressed) me.save.add({topPressed: game.data.pressed});
         if (game.data.steps > me.save.topSteps) {
             me.save.topSteps = game.data.steps;
+            me.save.topPressed = game.data.pressed;
             game.data.newHiScore = true;
         }
         //me.input.bindKey(me.input.KEY.ENTER, "enter", true);
@@ -35,6 +37,11 @@ game.GameOverScreen = me.ScreenObject.extend({
             {image: 'gameover'}
         ), 12);*/
 
+        var gameOverBG = new me.Sprite(
+            me.game.viewport.width/2,
+            me.game.viewport.height/2,
+            {image: 'gameoverbg'}
+        );
         var gameOverBG = new me.Sprite(
             me.game.viewport.width/2,
             me.game.viewport.height/2,
@@ -60,6 +67,7 @@ game.GameOverScreen = me.ScreenObject.extend({
                 );
                 this.yourScoreFont = new me.Font('gamefont', 20, 'white', 'center');
                 this.scoreFont = new me.Font('gamefont', 40, 'white', 'center');
+                this.highScoreFont = new me.Font('gamefont', 20, 'white', 'center');
                 //this.yourScore = 'Y O U R  S C O R E';
             },
 
@@ -79,15 +87,15 @@ game.GameOverScreen = me.ScreenObject.extend({
                 this.scoreFont.draw(
                     renderer,
                     game.data.steps.toFixed(2),
-                    me.game.viewport.width/2 + stepsText.width/2,
+                    me.game.viewport.width/2 + stepsText.width/2 + 40,
                     me.game.viewport.height/2 + 50
                 );
 
-                this.scoreFont.draw(
+                this.highScoreFont.draw(
                   renderer,
-                  "High score:" +me.save.topSteps.toFixed(2),
-                  me.game.viewport.width/2 + stepsText.width/2,
-                  me.game.viewport.height/2 + 100
+                  "High score: " +me.save.topSteps.toFixed(2),
+                  me.game.viewport.width/2 + stepsText.width,
+                  me.game.viewport.height/2 + 120
                 )
 
 
@@ -106,10 +114,37 @@ game.GameOverScreen = me.ScreenObject.extend({
 
           onClick: function(event) {
             console.log("Tweetybird");
+            var self = this;
             FB.getLoginStatus(function(response) {
-                statusChangeCallback(response);
+                self.statusChangeCallback(response);
             });
             return false;
+          },
+
+          statusChangeCallback: function(response) {
+            var self = this;
+            if (response.status === 'connected') {
+              // Logged into your app and Facebook.
+              self.testAPI();
+            } else {
+              // The person is not logged into your app or we are unable to tell.
+              console.log('Please log into this app.');
+              FB.login(function(response){
+                if (response.status === 'connected') {
+                    self.testAPI();
+                  } else {
+                    console.log("You need to be logged in to submit your score!");
+                  }
+                });
+            }
+          },
+
+          testAPI: function() {
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/me?fields=name,email', function(response) {
+              console.log('Successful login for: ' + response.name);
+              console.log('Thanks for logging in, ' + response.name + '!');
+            });
           },
 
           onOver: function(event) {

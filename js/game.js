@@ -5,14 +5,23 @@ var game = {
     // an object where to store game information
     data : {
         // score
-        score : 0
+        score : 0,
+        initialSeed: 1,
+        seed: 1
     },
 
+    "random" : function() {
+      var x = Math.sin(game.data.seed++) * 10000;
+      console.log(x);
+      console.log(game.data.seed);
+      console.log("Random returning "+(x - Math.floor(x)));
+      return x - Math.floor(x);
+    },
 
     // Run on page load.
     "onload" : function () {
       // Initialize the video.
-      if (!me.video.init(900, 600, {wrapper : "screen", scale : 'auto'})) {
+      if (!me.video.init(900, 600, {wrapper : "screen", scale : 'flex-width'})) {
         alert("Your browser does not support HTML5 canvas.");
         return;
       }
@@ -35,6 +44,9 @@ var game = {
 
       // Initialize melonJS and display a loading screen.
       me.state.change(me.state.LOADING);
+
+      this.data.initialSeed = Math.random() * 1000 + 1;
+      this.data.seed = Math.floor(this.data.initialSeed);
     },
 
     // Run on game resources loaded.

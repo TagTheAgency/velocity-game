@@ -46,6 +46,8 @@ game.BirdEntity = me.Entity.extend({
         }
         this.renderable.currentTransform.identity();
         if (me.input.isKeyPressed('fly')) {
+          game.data.pressed = game.data.pressed || [];
+          game.data.pressed.push(Math.round(game.data.steps*100));
             //me.audio.play('wing');
           /*  this.gravityForce -= 0.2;
             var currentPos = this.pos.y;
@@ -132,7 +134,7 @@ game.DeskEntity = me.Entity.extend({
     init: function(x, y) {
         var settings = {};
         var small = true;
-        if (Math.random() > 0.5) {
+        if (game.random() > 0.5) {
           small = false;
           settings.image = this.image = me.loader.getImage('desk_lrg');
           settings.width = 375;
@@ -282,7 +284,7 @@ game.PipeGenerator = me.Renderable.extend({
 
     update: function(dt) {
         if (this.generate++ % this.pipeFrequency == 0) {
-            var posY = Number.prototype.random(200, 400);
+            var posY = (game.random() * 200) + 200;//Number.prototype.random(200, 400);
 //                    me.video.renderer.getHeight() - 100,
 //                    800
 //            );
@@ -298,7 +300,7 @@ game.PipeGenerator = me.Renderable.extend({
 
             var posY2 = posY - hole;// me.game.viewport.height - this.pipeHoleSize;
 
-            var rand = Math.random();
+            var rand = game.random();//Math.random();
 
             if (rand > 0.8) {
               var obstacle = new me.pool.pull('cabinet', this.posX, posY);
