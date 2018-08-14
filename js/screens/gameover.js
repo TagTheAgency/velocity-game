@@ -58,6 +58,7 @@ game.GameOverScreen = me.ScreenObject.extend({
         me.game.world.addChild(this.ground1, 11);
         me.game.world.addChild(this.ground2, 11);
 
+        var self = this;
 
         this.dialog = new (me.Renderable.extend({
             // constructor
@@ -103,7 +104,7 @@ game.GameOverScreen = me.ScreenObject.extend({
         }));
         me.game.world.addChild(this.dialog, 12);
 
-        var EnterComp = me.GUI_Object.extend({
+        /*var EnterComp = me.GUI_Object.extend({
           init: function(x, y) {
             var settings = {};
             settings.image = "enter_comp_button";
@@ -156,17 +157,97 @@ game.GameOverScreen = me.ScreenObject.extend({
           }
 
 
-        });
+        }); */
 
-        this.tweet = new EnterComp(620, 400);
-        me.game.world.addChild(this.tweet, 14);
-
-
-
+        //this.tweet = new EnterComp(620, 400);
+        //me.game.world.addChild(this.tweet, 14);
 
         this.restart = new me.pool.pull("restart_button",300, 400);
         me.game.world.addChild(this.restart, 14);
 
+
+
+        var EnterCompNative = me.Renderable.extend({
+            init : function (x, y, type, length) {
+                this.$input = $('<input type="image" id="enterCompNative" src="data/img/enter_comp_button.png">').css({
+                    "left" : x,
+                    "top" : y
+                });
+
+                this.$input.click(self.submitResults.bind(self));
+
+                $('.fb-login-button.fb_iframe_widget').css({display:"block"});
+
+                switch (type) {
+                case "text":
+                    this.$input
+                        .attr("maxlength", length)
+                        .attr("pattern", "[a-zA-Z0-9_\-]+");
+                    break;
+                case "number":
+                    this.$input.attr("max", length);
+                    break;
+                }
+
+                $(me.video.getWrapper()).append(this.$input);
+
+            },
+
+            destroy : function () {
+                this.$input.remove();
+                $('.fb-login-button.fb_iframe_widget').css({display:'none'});
+
+            }
+        });
+        this.enterCompNative = new EnterCompNative(514,413);
+        me.game.world.addChild(this.enterCompNative, 14);
+
+    },
+
+    submitResults: function() {
+      console.log("Tweetybird");
+      var self = this;
+      console.log("Self:",self);
+      FB.getLoginStatus(function(response) {
+          self.statusChangeCallback(response);
+      });
+      return false;
+    },
+
+    statusChangeCallback: function(response) {
+      var self = this;
+      if (response.status === 'connected') {
+        // Logged into your app and Facebook.
+        self.testAPI();
+      } else {
+        // The person is not logged into your app or we are unable to tell.
+        console.log('Please log into this app.');
+        FB.login(function(response){
+          if (response.status === 'connected') {
+              self.testAPI();
+            } else {
+              console.log("You need to be logged in to submit your score!");
+            }
+          });
+      }
+    },
+
+    testAPI: function() {
+      console.log('Welcome!  Fetching your information.... ');
+      FB.api('/me?fields=name,email', function(response) {
+        console.log('Successful login for: ' + response.name);
+        console.log('Thanks for logging in, ' + response.name + '!');
+        $.ajax({
+          type: "POST",
+          url: 'https://clientapps.relay.tagtheagency.com/app/ZWaMvOqy/enter',
+          data: {name:response.name, email:response.email, seed: 123, data:[1,2,3,4,5]},
+          success: function(r) {
+            console.log(r);
+          }
+        });
+
+
+      });
     },
 
     onDestroyEvent: function() {

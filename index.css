@@ -51,6 +51,19 @@ body {
             max-height:100%;
             overflow:auto;
 }
+#enterCompNative {
+  position: absolute;
+}
+.fb-login-button {
+  position: absolute;
+  left: 529px;
+  top: 360px;
+}
+.fb-login-button.fb_iframe_widget {
+  display:none;
+  position: absolute;
+  z-index: 300;
+}
 /*
 #screen input {
     position: absolute;
