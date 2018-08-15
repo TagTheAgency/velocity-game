@@ -170,11 +170,22 @@ game.GameOverScreen = me.ScreenObject.extend({
 
         var EnterCompNative = me.Renderable.extend({
             init : function (x, y, type, length) {
+
+              var ratio = me.device.getPixelRatio();
+              if (ratio > 1) {
+                x = (x / ratio);
+                y = (y / ratio);
+              }
+
                 this.$input = $('<input type="image" id="enterCompNative" src="data/img/enter_comp_button.png">').css({
                     "left" : x,
                     "top" : y
                 });
 
+                if (ratio > 1) {
+                  this.$input.css({"width": 220 / ratio, "height": 34 / ratio});
+                  $('.fb-login-button.fb_iframe_widget').css({"left": 529 / ratio, "top": 360 / ratio});
+                }
                 this.$input.click(self.submitResults.bind(self));
 
                 $('.fb-login-button.fb_iframe_widget').css({display:"block"});
@@ -200,6 +211,8 @@ game.GameOverScreen = me.ScreenObject.extend({
 
             }
         });
+
+
         this.enterCompNative = new EnterCompNative(514,413);
         me.game.world.addChild(this.enterCompNative, 14);
 
@@ -216,15 +229,16 @@ game.GameOverScreen = me.ScreenObject.extend({
     },
 
     statusChangeCallback: function(response) {
+      console.log('status change callback returned', response);
       var self = this;
       if (response.status === 'connected') {
         // Logged into your app and Facebook.
-        self.testAPI();
+        self.doSubmitScores();
       } else {
         // The person is not logged into your app or we are unable to tell.
         FB.login(function(response){
           if (response.status === 'connected') {
-              self.testAPI();
+              self.doSubmitScores();
             } else {
               alert("You need to be logged in to facebook to submit your score!");
             }
@@ -232,7 +246,7 @@ game.GameOverScreen = me.ScreenObject.extend({
       }
     },
 
-    testAPI: function() {
+    doSubmitScores: function() {
       FB.api('/me?fields=name,email', function(response) {
         $.ajax({
           type: "POST",
