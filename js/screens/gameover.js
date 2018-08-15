@@ -105,64 +105,6 @@ game.GameOverScreen = me.ScreenObject.extend({
         }));
         me.game.world.addChild(this.dialog, 12);
 
-        /*var EnterComp = me.GUI_Object.extend({
-          init: function(x, y) {
-            var settings = {};
-            settings.image = "enter_comp_button";
-            settings.spritewidth = 212;
-            settings.spriteheight = 34;
-            this._super(me.GUI_Object, "init", [x, y, settings]);
-          },
-
-          onClick: function(event) {
-            console.log("Tweetybird");
-            var self = this;
-            FB.getLoginStatus(function(response) {
-                self.statusChangeCallback(response);
-            });
-            return false;
-          },
-
-          statusChangeCallback: function(response) {
-            var self = this;
-            if (response.status === 'connected') {
-              // Logged into your app and Facebook.
-              self.testAPI();
-            } else {
-              // The person is not logged into your app or we are unable to tell.
-              console.log('Please log into this app.');
-              FB.login(function(response){
-                if (response.status === 'connected') {
-                    self.testAPI();
-                  } else {
-                    console.log("You need to be logged in to submit your score!");
-                  }
-                });
-            }
-          },
-
-          testAPI: function() {
-            console.log('Welcome!  Fetching your information.... ');
-            FB.api('/me?fields=name,email', function(response) {
-              console.log('Successful login for: ' + response.name);
-              console.log('Thanks for logging in, ' + response.name + '!');
-            });
-          },
-
-          onOver: function(event) {
-            document.body.style.cursor = 'pointer';
-          },
-
-          onOut: function(event) {
-            document.body.style.cursor = 'auto';
-          }
-
-
-        }); */
-
-        //this.tweet = new EnterComp(620, 400);
-        //me.game.world.addChild(this.tweet, 14);
-
         this.restart = new me.pool.pull("restart_button",300, 400);
         me.game.world.addChild(this.restart, 14);
 
@@ -219,9 +161,7 @@ game.GameOverScreen = me.ScreenObject.extend({
     },
 
     submitResults: function() {
-      console.log("Tweetybird");
       var self = this;
-      console.log("Self:",self);
       FB.getLoginStatus(function(response) {
           self.statusChangeCallback(response);
       });
@@ -229,13 +169,12 @@ game.GameOverScreen = me.ScreenObject.extend({
     },
 
     statusChangeCallback: function(response) {
-      console.log('status change callback returned', response);
       var self = this;
       if (response.status === 'connected') {
         // Logged into your app and Facebook.
         self.doSubmitScores();
       } else {
-        // The person is not logged into your app or we are unable to tell.
+        // The person is not logged into the app or we are unable to tell.
         FB.login(function(response){
           if (response.status === 'connected') {
               self.doSubmitScores();
@@ -251,7 +190,7 @@ game.GameOverScreen = me.ScreenObject.extend({
         $.ajax({
           type: "POST",
           url: 'submit.php',
-          data: {name:response.name, email:response.email, personId: response.id, seed: me.save.topSeed, data:JSON.stringify(me.save.topPressed), score: me.save.topSteps},
+          data: {name:response.name, email:response.email, personid: response.id, seed: me.save.topSeed, data:JSON.stringify(me.save.topPressed), score: me.save.topSteps},
           success: function(r) {
             alert('Your high score has been submitted, good luck!');
           },
