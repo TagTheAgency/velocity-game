@@ -20,6 +20,7 @@ game.PlayScreen = me.ScreenObject.extend({
         game.data.start = false;
         game.data.newHiscore = false;
         game.data.pressed = [];
+        game.data.initialSeed = game.data.seed;
 
         this.bg = new BackgroundLayer('bg', 1);
         me.game.world.addChild(this.bg);

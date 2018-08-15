@@ -18,6 +18,7 @@ game.GameOverScreen = me.ScreenObject.extend({
         if (game.data.steps > me.save.topSteps) {
             me.save.topSteps = game.data.steps;
             me.save.topPressed = game.data.pressed;
+            me.save.topSeed = game.data.initialSeed;
             game.data.newHiScore = true;
         }
         //me.input.bindKey(me.input.KEY.ENTER, "enter", true);
@@ -221,28 +222,32 @@ game.GameOverScreen = me.ScreenObject.extend({
         self.testAPI();
       } else {
         // The person is not logged into your app or we are unable to tell.
-        console.log('Please log into this app.');
         FB.login(function(response){
           if (response.status === 'connected') {
               self.testAPI();
             } else {
-              console.log("You need to be logged in to submit your score!");
+              alert("You need to be logged in to facebook to submit your score!");
             }
           });
       }
     },
 
     testAPI: function() {
-      console.log('Welcome!  Fetching your information.... ');
       FB.api('/me?fields=name,email', function(response) {
-        console.log('Successful login for: ' + response.name);
-        console.log('Thanks for logging in, ' + response.name + '!');
         $.ajax({
           type: "POST",
-          url: 'https://clientapps.relay.tagtheagency.com/app/ZWaMvOqy/enter',
-          data: {name:response.name, email:response.email, seed: 123, data:[1,2,3,4,5]},
+          url: 'submit.php',
+          data: {name:response.name, email:response.email, seed: me.save.topSeed, data:JSON.stringify(me.save.topPressed), score: me.save.topSteps},
           success: function(r) {
-            console.log(r);
+            //console.log(r);
+            try {
+              //JSON.parse(r);
+              alert('Your high score has been submitted, good luck!');
+            } catch(e) {
+              alert('Sorry, there was an error submitting your score!');
+            }
+
+//            console.log(r);
           }
         });
 
