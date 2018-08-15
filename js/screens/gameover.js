@@ -247,21 +247,16 @@ game.GameOverScreen = me.ScreenObject.extend({
     },
 
     doSubmitScores: function() {
-      FB.api('/me?fields=name,email', function(response) {
+      FB.api('/me?fields=id,name,email', function(response) {
         $.ajax({
           type: "POST",
           url: 'submit.php',
-          data: {name:response.name, email:response.email, seed: me.save.topSeed, data:JSON.stringify(me.save.topPressed), score: me.save.topSteps},
+          data: {name:response.name, email:response.email, personId: response.id, seed: me.save.topSeed, data:JSON.stringify(me.save.topPressed), score: me.save.topSteps},
           success: function(r) {
-            //console.log(r);
-            try {
-              //JSON.parse(r);
-              alert('Your high score has been submitted, good luck!');
-            } catch(e) {
-              alert('Sorry, there was an error submitting your score!');
-            }
-
-//            console.log(r);
+            alert('Your high score has been submitted, good luck!');
+          },
+          error: function() {
+            alert('Sorry, there was an error submitting your score!');
           }
         });
 

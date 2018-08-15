@@ -12,14 +12,13 @@ var game = {
 
     "random" : function() {
       var x = Math.sin(game.data.seed++) * 10000;
-      console.log(x);
-      console.log(game.data.seed);
-      console.log("Random returning "+(x - Math.floor(x)));
       return x - Math.floor(x);
     },
 
     // Run on page load.
     "onload" : function () {
+
+
       // Initialize the video.
       if (!me.video.init(900, 600, {wrapper : "screen", scale: "1", zoomX: 900, zoomY: 600})) {
         alert("Your browser does not support HTML5 canvas.");
@@ -47,6 +46,9 @@ var game = {
 
       this.data.initialSeed = Math.random() * 1000 + 1;
       this.data.seed = Math.floor(this.data.initialSeed);
+
+
+
     },
 
     // Run on game resources loaded.
@@ -75,7 +77,17 @@ var game = {
         //me.input.bindKey(me.input.KEY.M, "mute", true);
         me.input.bindPointer(me.input.KEY.SPACE);
 
+        me.save.add({"version": 0});
+        if (me.save.version < 1) {
+          me.save.remove('topSteps');
+          me.save.remove('topPressed');
+          me.save.version = 1;
+        }
+
         // Start the game.
         me.state.change(me.state.PLAY);
+
+
+
     }
 };

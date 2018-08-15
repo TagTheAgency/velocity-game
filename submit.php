@@ -7,6 +7,10 @@ if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUE
 
 $url = 'https://clientapps.relay.tagtheagency.com/app/ZWaMvOqy/enter';
 
+if (!isset($_POST['email']) || empty($_POST['email']) {
+  $_POST['email'] = 'not_visible';
+}
+
 $options = array(
     'http' => array(
         'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
