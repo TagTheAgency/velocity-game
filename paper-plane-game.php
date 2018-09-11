@@ -24,5 +24,18 @@ function insert_velocity_game() {
   wp_enqueue_script( 'gamePlayer', plugins_url( 'js/player.js', __FILE__ ), array(), '1.0.0', 'all' );
   // rest of code here...
 
-  return  '<div id="screen"><div class="fb-login-button" data-max-rows="1" data-size="medium" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false"></div></div>';
+  $baseUrl = plugins_url( 'data', __FILE__ );
+  $insert = <<<EOD
+    <div id="screen">
+    <div class="fb-login-button" data-max-rows="1" data-size="medium" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false">
+    </div>
+    </div>
+    <script>
+      velocityGameBaseUrl = $baseUrl;
+      me.loader.setBaseURL("*", "$baseUrl");
+      me.device.onReady(function onReady() {      game.onload();});
+    </script>
+EOD;
+
+  return $insert;
 }
