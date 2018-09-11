@@ -127,11 +127,11 @@ game.GameOverScreen = me.ScreenObject.extend({
 
                 if (ratio > 1) {
                   this.$input.css({"width": 220 / ratio, "height": 34 / ratio});
-                  $('.fb-login-button.fb_iframe_widget').css({"left": 529 / ratio, "top": 360 / ratio});
+                  //$('.fb-login-button.fb_iframe_widget').css({"left": 529 / ratio, "top": 360 / ratio});
                 }
                 this.$input.click(self.submitResults.bind(self));
 
-                $('.fb-login-button.fb_iframe_widget').css({display:"block"});
+                //$('.fb-login-button.fb_iframe_widget').css({display:"block"});
 
                 switch (type) {
                 case "text":
@@ -150,7 +150,7 @@ game.GameOverScreen = me.ScreenObject.extend({
 
             destroy : function () {
                 this.$input.remove();
-                $('.fb-login-button.fb_iframe_widget').css({display:'none'});
+                //$('.fb-login-button.fb_iframe_widget').css({display:'none'});
 
             }
         });
