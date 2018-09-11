@@ -15,6 +15,7 @@ game.GameOverScreen = me.ScreenObject.extend({
 
         if (!me.save.topSteps) me.save.add({topSteps: game.data.steps});
         if (!me.save.topPressed) me.save.add({topPressed: game.data.pressed});
+        if (!me.save.topSeed) me.save.add({topPressed: game.data.initialSeed});
         if (game.data.steps > me.save.topSteps) {
             me.save.topSteps = game.data.steps;
             me.save.topPressed = game.data.pressed;
@@ -181,7 +182,7 @@ game.GameOverScreen = me.ScreenObject.extend({
             } else {
               alert("You need to be logged in to facebook to submit your score!");
             }
-          });
+          }, {scope: 'email'});
       }
     },
 
