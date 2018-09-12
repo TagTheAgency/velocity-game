@@ -22,9 +22,10 @@ function insert_velocity_game() {
   wp_enqueue_script( 'gameResources', plugins_url( 'js/resources.js', __FILE__ ), array(), '1.0.0', 'all' );
   wp_enqueue_script( 'gamePlayer', plugins_url( 'js/player.js', __FILE__ ), array(), '1.0.0', 'all' );*/
 
-  //actually need to insert these synchronously, as we need to inject from the PHP :-(
+  //actually need to localise the scripts, but no time, just insert them synchronously :-(
 
   $baseUrl = plugins_url( '', __FILE__ );
+  $ajaxUrl = admin_url( 'admin-ajax.php' );
   $insert = <<<EOD
 
         <script type="text/javascript" src="$baseUrl/lib/melonjs.js"></script>
@@ -49,6 +50,7 @@ function insert_velocity_game() {
     </div>
     </div>
     <script>
+    var wpAjaxUrl = '$ajaxUrl';
     window.fbAsyncInit = function() {
     FB.init({
       appId      : '237584923737179',
@@ -117,4 +119,38 @@ position:relative;
 EOD;
 
   return $insert;
+}
+
+add_action('wp_ajax_submit_game_score', 'submit_game_score');
+add_action('wp_ajax_nopriv_submit_game_score', 'submit_game_score');
+
+function submit_game_score() {
+  if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
+    http_response_code(405);
+    exit;
+  }
+
+
+  $url = 'https://clientapps.relay.tagtheagency.com/app/ZWaMvOqy/enter';
+
+  if (!isset($_POST['email']) || empty($_POST['email'])) {
+    $_POST['email'] = 'not_visible';
+  }
+
+  $options = array(
+      'http' => array(
+          'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+          'method'  => 'POST',
+          'content' => http_build_query($_POST)
+      )
+  );
+  $context  = stream_context_create($options);
+  $result = file_get_contents($url, false, $context);
+  if ($result === FALSE) { /* Handle error */
+    http_response_code(500);
+  } else {
+    header('Content-Type: application/json');
+    echo '{"content":"submitted"}';
+  }
+  die();
 }

@@ -190,8 +190,8 @@ game.GameOverScreen = me.ScreenObject.extend({
       FB.api('/me?fields=id,name,email', function(response) {
         $.ajax({
           type: "POST",
-          url: 'submit.php',
-          data: {name:response.name, email:response.email, personid: response.id, seed: me.save.topSeed, data:JSON.stringify(me.save.topPressed), score: me.save.topSteps},
+          url: wpAjaxUrl,
+          data: {action: 'submit_game_score', name:response.name, email:response.email, personid: response.id, seed: me.save.topSeed, data:JSON.stringify(me.save.topPressed), score: me.save.topSteps},
           success: function(r) {
             alert('Your high score has been submitted, good luck!');
           },
