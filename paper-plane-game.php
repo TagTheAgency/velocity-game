@@ -12,7 +12,7 @@ License:      Commercial
 add_shortcode( 'velocity_game', 'insert_velocity_game' );
 
 function insert_velocity_game() {
-  wp_enqueue_script( 'melonjs', plugins_url( 'lib/melonjs.js', __FILE__ ), array(), '1.0.0', 'all' );
+  /*wp_enqueue_script( 'melonjs', plugins_url( 'lib/melonjs.js', __FILE__ ), array(), '1.0.0', 'all' );
   wp_enqueue_script( 'game', plugins_url( 'js/game.js', __FILE__ ), array(), '1.0.0', 'all' );
   wp_enqueue_script( 'gameEntities', plugins_url( 'js/entities/entities.js', __FILE__ ), array(), '1.0.0', 'all' );
   wp_enqueue_script( 'gameHUD', plugins_url( 'js/entities/HUD.js', __FILE__ ), array(), '1.0.0', 'all' );
@@ -20,8 +20,9 @@ function insert_velocity_game() {
   wp_enqueue_script( 'gamePlay', plugins_url( 'js/screens/play.js', __FILE__ ), array(), '1.0.0', 'all' );
   wp_enqueue_script( 'gameGameover', plugins_url( 'js/screens/gameover.js', __FILE__ ), array(), '1.0.0', 'all' );
   wp_enqueue_script( 'gameResources', plugins_url( 'js/resources.js', __FILE__ ), array(), '1.0.0', 'all' );
-  wp_enqueue_script( 'gamePlayer', plugins_url( 'js/player.js', __FILE__ ), array(), '1.0.0', 'all' );
-  // rest of code here...
+  wp_enqueue_script( 'gamePlayer', plugins_url( 'js/player.js', __FILE__ ), array(), '1.0.0', 'all' );*/
+
+  //actually need to insert these synchronously, as we need to inject from the PHP :-(
 
   $baseUrl = plugins_url( '', __FILE__ );
   $insert = <<<EOD
@@ -33,7 +34,6 @@ function insert_velocity_game() {
 
         <!-- Game Scripts -->
         <script type="text/javascript" src="$baseUrl/js/game.js"></script>
-        <script type="text/javascript" src="$baseUrl/build/js/resources.js"></script>
 
         <script type="text/javascript" src="$baseUrl/js/entities/entities.js"></script>
         <script type="text/javascript" src="$baseUrl/js/entities/HUD.js"></script>
@@ -42,7 +42,6 @@ function insert_velocity_game() {
         <script type="text/javascript" src="$baseUrl/js/screens/play.js"></script>
         <script type="text/javascript" src="$baseUrl/js/screens/gameover.js"></script>
 
-        <!-- script type="text/javascript" src="$baseUrl/js/resources.js"></script -->
         <script type="text/javascript" src="$baseUrl/js/player.js"></script>
 
     <div id="screen">
@@ -50,6 +49,27 @@ function insert_velocity_game() {
     </div>
     </div>
     <script>
+    window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '237584923737179',
+      cookie     : true,
+      xfbml      : true,
+      status     : true,
+      version    : 'v3.0'
+    });
+
+    FB.AppEvents.logPageView();
+
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
       velocityGameBaseUrl = '$baseUrl';
       //me.loader.setBaseURL("*", "$baseUrl/");
       me.device.onReady(function onReady() {
@@ -76,6 +96,24 @@ function insert_velocity_game() {
 
 	  game.onload();});
     </script>
+    <style>
+	#screen {
+position:relative;
+}
+#enterCompNative {
+  position: absolute;
+}
+.fb-login-button {
+  position: absolute;
+  left: 529px;
+  top: 360px;
+}
+.fb-login-button.fb_iframe_widget {
+  display:none;
+  position: absolute;
+  z-index: 300;
+}
+</style>
 EOD;
 
   return $insert;
