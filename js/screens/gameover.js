@@ -118,16 +118,29 @@ game.GameOverScreen = me.ScreenObject.extend({
                 x = (x / ratio);
                 y = (y / ratio);
               }
+	      var scaledWidth = me.video.renderer.gameWidthZoom;
+	      console.log('scaled width is ', scaledWidth);
+
+	      if (scaledWidth != 900) {
+		x = x / 900 * scaledWidth;
+		y = y / 900 * scaledWidth;
+	      }
 
                 this.$input = $('<input type="image" id="enterCompNative" src="data/img/enter_comp_button.png">').css({
                     "left" : x,
                     "top" : y
                 });
 
-                if (ratio > 1) {
-                  this.$input.css({"width": 220 / ratio, "height": 34 / ratio});
+		var scaledCssWidth = 220 / ratio;
+		var scaledCssHeight = 34 / ratio;
+
+		scaledCssWidth = scaledCssWidth / 900 * scaledWidth;
+		scaledCssHeight = scaledCssHeight / 900 * scaledWidth;
+
+//                if (ratio > 1) {
+                  this.$input.css({"width": scaledCssWidth, "height": scaledCssHeight});
                   //$('.fb-login-button.fb_iframe_widget').css({"left": 529 / ratio, "top": 360 / ratio});
-                }
+//                }
                 this.$input.click(self.submitResults.bind(self));
 
                 //$('.fb-login-button.fb_iframe_widget').css({display:"block"});
@@ -189,7 +202,7 @@ game.GameOverScreen = me.ScreenObject.extend({
       FB.api('/me?fields=id,name,email', function(response) {
         $.ajax({
           type: "POST",
-          url: 'submit.php',
+          url: '/app/ZWaMvOqy/enter',
           data: {name:response.name, email:response.email, personid: response.id, seed: me.save.topSeed, data:JSON.stringify(me.save.topPressed), score: me.save.topSteps},
           success: function(r) {
             alert('Your high score has been submitted, good luck!');

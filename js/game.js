@@ -20,7 +20,7 @@ var game = {
 
 
       // Initialize the video.
-      if (!me.video.init(900, 600, {wrapper : "screen", scale: "1", zoomX: 900, zoomY: 600})) {
+      if (!me.video.init(900, 600, {wrapper : "screen", scale: "auto", useParentDOMSize:true, scaleMethod:"fit"})) {
         alert("Your browser does not support HTML5 canvas.");
         return;
       }
