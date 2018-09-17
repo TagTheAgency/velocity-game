@@ -45,6 +45,14 @@ function insert_velocity_game() {
 
         <script type="text/javascript" src="$baseUrl/js/player.js"></script>
 
+        <script>
+      	var ua = window.navigator.userAgent;
+      	console.log(ua);
+      	if (ua.indexOf('mobi') >= 0 || ua.indexOf('Mobi') >= 0) {
+      		document.location.href='https://clientapps.relay.tagtheagency.com/velocity';
+      	} 
+      	</script>
+
         <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
