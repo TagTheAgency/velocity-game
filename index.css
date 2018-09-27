@@ -41,7 +41,7 @@ body {
 
     width: 900px;
     height: 600px;
-    position:absolute; /*it can be fixed too*/
+    position:relative;; /*it can be fixed too*/
             left:0; right:0;
             top:0; bottom:0;
             margin:auto;

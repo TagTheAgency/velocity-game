@@ -120,7 +120,7 @@ game.GameOverScreen = me.ScreenObject.extend({
                 y = (y / ratio);
               }
 
-                this.$input = $('<input type="image" id="enterCompNative" src="/wp-content/plugins/velocity-game/data/img/enter_comp_button.png">').css({
+                this.$input = $('<input type="image" id="enterCompNative" src="data/img/enter_comp_button.png">').css({
                     "left" : x,
                     "top" : y
                 });
